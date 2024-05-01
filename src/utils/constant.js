@@ -27,3 +27,40 @@ export let DummyData = [
     list: "todo",
   },
 ];
+
+export const datas = {
+  data: [
+    {
+      todo: [
+        {
+          id: 1,
+          title: "Morning Walk",
+          description: "Walk for 15 min in park",
+          list: "todo",
+        },
+        {
+          id: 4,
+          title: "Client Meet",
+          description: "show process of project till & discussion",
+          list: "todo",
+        },
+      ],
+      inprocess: [
+        {
+          id: 2,
+          title: "Evening Walk",
+          description: "Walk for 15 min in park",
+          list: "inprogress",
+        },
+      ],
+      done: [
+        {
+          id: 3,
+          title: "Coding Challenge",
+          description: "Code 1 hour daily in leetcode",
+          list: "done",
+        },
+      ],
+    },
+  ],
+};
