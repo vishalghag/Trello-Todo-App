@@ -41,8 +41,10 @@ const PopUp = () => {
     ) {
       if (formValues.isEdit) {
         updateFormValues(formValues);
+        closeModalFn();
       } else {
         addFormEntries(formValues);
+        closeModalFn();
       }
       setShowForm(false);
     }
