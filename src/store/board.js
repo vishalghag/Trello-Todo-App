@@ -37,18 +37,8 @@ export const deleteFormValuesAtom = atom(
 export const updateFormValuesAtom = atom(
   null,
   async function (get, set, formValues) {
-    const {
-      title = "",
-      description = "",
-      taskStatus = "",
-      id: idToBeUpdated = "",
-    } = formValues;
-    if (
-      title?.length &&
-      description?.length &&
-      taskStatus?.length &&
-      idToBeUpdated?.length
-    ) {
+    const { title = "", description = "", id: idToBeUpdated = "" } = formValues;
+    if (title?.length && description?.length && idToBeUpdated?.length) {
       const currentFormEntries = get(formEntriesAtom);
       const updatedFormEntries = currentFormEntries.map((datum) => {
         const { id } = datum;
@@ -63,11 +53,6 @@ export const updateFormValuesAtom = atom(
         // }
       });
       set(formEntriesAtom, updatedFormEntries);
-      set(formValuesAtom, {
-        title: null,
-        description: null,
-        taskStatus: null,
-      });
     }
   }
 );

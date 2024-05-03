@@ -1,5 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CommonInput from "../common/CommonInput";
 import CommonTextArea from "../common/CommonTextArea";
 import CommonDropDown from "../common/CommonDropDown";
@@ -21,48 +21,48 @@ const PopUp = () => {
   const [descriptionErrorStatus, setDescriptionErrorStatus] = useState(false);
 
   function handleFormSubmit() {
-    if (!formValues.title && !formValues.description) {
+    if (!formValues.title || formValues.title.length < 4) {
       setTitleErrorStatus(true);
-      setDescriptionErrorStatus(true);
-      return;
-    } else if (formValues.title.length < 4) {
-      setTitleErrorStatus(true);
-      return;
-    } else if (formValues.description.length < 20) {
-      setDescriptionErrorStatus(true);
-      return;
     } else {
       setTitleErrorStatus(false);
+    }
+
+    if (!formValues.description || formValues.description.length < 20) {
+      setDescriptionErrorStatus(true);
+    } else {
       setDescriptionErrorStatus(false);
-      if (formValues?.isEdit) {
+    }
+
+    if (
+      formValues.title &&
+      formValues.description &&
+      formValues.title.length >= 4 &&
+      formValues.description.length >= 25
+    ) {
+      if (formValues.isEdit) {
         updateFormValues(formValues);
-        setShowForm(false);
-      } else if (formValues?.isEdit === false) {
+      } else {
         addFormEntries(formValues);
-        setShowForm(false);
       }
+      setShowForm(false);
     }
   }
 
   const handleChange = (event) => {
-    // if (event?.target?.value) {
     const { name, value } = event.target;
     setFormValues((prevFormValues) => ({
       ...prevFormValues,
       [name]: value,
     }));
-    // }
   };
 
   const closeModalFn = () => {
     setShowForm(false);
-    if (formValues?.isEdit) {
-      updateFormValues(formValues);
-      // setShowForm(false);
-    } else if (formValues?.isEdit === false) {
-      addFormEntries(formValues);
-      // setShowForm(false);
-    }
+    setFormValues({
+      title: null,
+      description: null,
+      taskStatus: null,
+    });
   };
 
   return (
@@ -71,7 +71,7 @@ const PopUp = () => {
         className=" fixed left-0 right-0 top-0 bottom-0 bg-black bg-opacity-50"
         onClick={closeModalFn}
       ></div>
-      <div className="fixed w-[300px] h-[350px] md:w-[500px] md:h-[500px] bg-white/70 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40 rounded-lg">
+      <div className="p-2 fixed w-[300px] h-[350px] md:w-[500px] md:h-[500px] bg-white/70 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40 rounded-lg">
         <div className="float-end mr-2">
           <XMarkIcon
             className=" w-8 h-8  my-1 cursor-pointer"
@@ -100,20 +100,23 @@ const PopUp = () => {
             monitorState={handleChange}
             errorState={
               descriptionErrorStatus
-                ? "Description can not be empty and less than 20 char"
+                ? "Description can not be empty and less than 25 char"
                 : ""
             }
             name="description"
           />
         </div>
-        <div className=" flex justify-center mt-[4%] w-full">
-          <CommonDropDown
-            options={["Select Task", "Todo", "In-Process", "Done"]}
-            currentOption={formValues?.taskStatus}
-            setOption={handleChange}
-            name={"taskStatus"}
-          />
-        </div>
+        {!formValues.isEdit ? (
+          <div className=" flex justify-center mt-[4%] w-full">
+            <CommonDropDown
+              options={["Select Task", "Todo", "In-Process", "Done"]}
+              currentOption={formValues?.taskStatus}
+              setOption={handleChange}
+              name={"taskStatus"}
+            />
+          </div>
+        ) : null}
+
         <div className=" flex justify-center md:mt-[20%] mt-[9%] w-full">
           <CommonBtn
             buttonName={formValues.isEdit ? "Update Task" : "Add Task"}

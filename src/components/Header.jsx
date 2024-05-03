@@ -21,7 +21,7 @@ const Header = () => {
           className="w-44 md:w-56 object-contain pb-10 md:pb-0 ml-3 "
         />
 
-        <div className="flex items-center space-x-5 flex-1 justify-end w-full">
+        <div className="flex items-center justify-center space-x-5 flex-1 md:justify-end w-full">
           <CommonBtn buttonName={"➕ Add Task"} buttonOnClick={showModalFn} />
         </div>
       </div>
