@@ -6,10 +6,12 @@ const CommonInput = ({
   errorState,
   valueState,
   monitorState,
+  name,
 }) => {
   return (
     <>
       <input
+        name={name}
         type={inputType}
         placeholder={placeholderText}
         value={valueState}

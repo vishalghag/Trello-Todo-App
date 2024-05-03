@@ -6,11 +6,13 @@ const CommonTextArea = ({
   errorState,
   valueState,
   monitorState,
+  name,
 }) => {
   return (
     <>
       {/* <div className="flex flex-col relative"> */}
       <textarea
+        name={name}
         type={inputType}
         placeholder={placeholderText}
         value={valueState}

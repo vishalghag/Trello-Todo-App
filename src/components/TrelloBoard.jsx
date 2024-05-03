@@ -1,102 +1,73 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { DummyData } from "../utils/constant";
-import Columns from "./Columns";
-import CommonBtn from "../common/CommonBtn";
 import PopUp from "./PopUp";
+import { useAtom, useAtomValue } from "jotai";
+import { formEntriesAtom, showFormAtom } from "../store/board";
+import CommonCard from "../common/CommonCard";
 
 const TrelloBoard = () => {
+  const formEntries = useAtomValue(formEntriesAtom);
+  const [showForm, setShowForm] = useAtom(showFormAtom);
   const [tableData, setTableData] = useState(DummyData);
-  const [showModal, setShowModal] = useState(false);
-  const statusOptions = ["Todo", "In-Process", "Done"];
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [titleErrorStatus, setTitleErrorStatus] = useState(false);
-  const [descriptionErrorStatus, setDescriptionErrorStatus] = useState(false);
 
-  let data = {};
+  // const addTaskFn = () => {
+  //   console.log("clicked");
+  //   if (!title && !description) {
+  //     setTitleErrorStatus(true);
+  //     setDescriptionErrorStatus(true);
+  //   } else if (!title && title.length > 4) {
+  //     setTitleErrorStatus(true);
+  //   } else if (!description && description.length > 50) {
+  //     setDescriptionErrorStatus(true);
+  //   } else {
+  //     setTitleErrorStatus(false);
+  //     setDescriptionErrorStatus(false);
+  //     let data = {
+  //       title: title,
+  //       description: description,
+  //     };
+  //     console.log(data);
+  //     setShowForm(false);
+  //   }
+  // };
 
-  const showModalFn = () => {
-    setShowModal(true);
-  };
-
-  const closeModalFn = () => {
-    setShowModal(false);
-    setTitleErrorStatus(false);
-    setDescriptionErrorStatus(false);
-    setTitle("");
-    setDescription("");
-  };
-
-  const addTaskFn = () => {
-    console.log("clicked");
-    if (!title && !description) {
-      setTitleErrorStatus(true);
-      setDescriptionErrorStatus(true);
-    } else if (!title && title.length > 4) {
-      setTitleErrorStatus(true);
-    } else if (!description && description.length > 50) {
-      setDescriptionErrorStatus(true);
-    } else {
-      setTitleErrorStatus(false);
-      setDescriptionErrorStatus(false);
-      let data = {
-        title: title,
-        description: description,
-      };
-      console.log(data);
-      closeModalFn();
-    }
-  };
-
-  const titleInputState = (e) => {
-    console.log(title);
-    setTitle(e.target.value);
-  };
-
-  const descriptionInputState = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handleOnDragEnd = () => {};
+  function Cards(status) {
+    return formEntries?.map((datum, index) => {
+      if (datum.taskStatus === status) {
+        return <CommonCard key={index} {...datum} />;
+      }
+    });
+  }
 
   return (
     <>
-      <div className=" flex justify-center mt-4">
+      {/* <div className=" flex justify-center mt-4">
         <CommonBtn buttonName={"Add Task"} buttonOnClick={showModalFn} />
-      </div>
-      {/* <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="board" direction="horizontal" type="column">
-          {(provided) => (
-            <div
-              className=" grid  grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto mt-10"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {/* {provided.droppableProps} */}
+      </div> */}
+      <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto mt-10 gap-10">
+        <div className=" bg-gray-500/30 p-2 max-h-[600px] overflow-auto overflow-y-auto rounded-md">
+          <div className="flex justify-center items-center">
+            <h2 className=" text-2xl text-black/50 font-medium">Todo</h2>
+          </div>
+          {Cards("Todo")}
+        </div>
 
-      {/* {tableData.map((ele) => (
-                <>
-                  <Columns key={ele.id} id={ele.id} todos={ele} />
-                </>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext> */}
-      {showModal && (
-        <PopUp
-          closeModalFn={closeModalFn}
-          statusOptions={statusOptions}
-          addTaskFn={addTaskFn}
-          titleInputState={titleInputState}
-          descriptionInputState={descriptionInputState}
-          title={title}
-          description={description}
-          titleErrorStatus={titleErrorStatus}
-          descriptionErrorStatus={descriptionErrorStatus}
-        />
-      )}
+        <div className=" bg-gray-500/30 p-2 max-h-[600px] overflow-auto overflow-y-auto rounded-md">
+          <div className="flex justify-center items-center">
+            <h2 className=" text-2xl text-black/50 font-medium">In-Process</h2>
+          </div>
+          {Cards("In-Process")}
+        </div>
+
+        <div className=" bg-gray-500/30 p-2 max-h-[600px] overflow-auto overflow-y-auto rounded-md">
+          <div className="flex justify-center items-center">
+            <h2 className=" text-2xl text-black/50 font-medium">Done</h2>
+          </div>
+          {Cards("Done")}
+        </div>
+      </div>
+
+      {showForm && <PopUp />}
     </>
   );
 };
