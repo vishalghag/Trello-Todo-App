@@ -9,20 +9,19 @@ const TrelloBoard = () => {
   const [formEntries, setFormEntries] = useAtom(formEntriesAtom);
   const [showForm, setShowForm] = useAtom(showFormAtom);
 
-  // Load formEntries from localStorage on component mount
-  // useEffect(() => {
-  //   const savedEntries = localStorage.getItem("formEntries");
-  //   if (savedEntries) {
-  //     setFormEntries(JSON.parse(savedEntries));
-  //   }
-  // }, []);
+  useEffect(() => {
+    const savedEntries = localStorage.getItem("formEntries");
+    if (savedEntries) {
+      setFormEntries(JSON.parse(savedEntries));
+    }
+  }, []);
 
-  // // Save formEntries to localStorage whenever it changes
-  // useEffect(() => {
-  //   if (formEntries.length > 0) {
-  //     localStorage.setItem("formEntries", JSON.stringify(formEntries));
-  //   }
-  // }, [formEntries]);
+  // Save formEntries to localStorage whenever it changes
+  useEffect(() => {
+    if (formEntries.length >= 0) {
+      localStorage.setItem("formEntries", JSON.stringify(formEntries));
+    }
+  }, [formEntries]);
 
   function Cards(status) {
     return formEntries?.map((datum, index) => {
