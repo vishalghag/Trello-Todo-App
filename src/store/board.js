@@ -47,10 +47,9 @@ export const updateFormValuesAtom = atom(
             ...datum,
             ...formValues,
           };
+        } else {
+          return { ...datum };
         }
-        //  else {
-        //   return datum;
-        // }
       });
       set(formEntriesAtom, updatedFormEntries);
     }
